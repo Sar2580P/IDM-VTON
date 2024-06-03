@@ -55,7 +55,7 @@ def parse_args():
     parser.add_argument("--num_inference_steps",type=int,default=30,)
     parser.add_argument("--output_dir",type=str,default="result",)
     parser.add_argument("--unpaired",action="store_true",)
-    parser.add_argument("--data_dir",type=str,default="/home/omnious/workspace/yisol/Dataset/zalando")
+    parser.add_argument("--data_dir",type=str,default="archive")
     parser.add_argument("--seed", type=int, default=42,)
     parser.add_argument("--test_batch_size", type=int, default=2,)
     parser.add_argument("--guidance_scale",type=float,default=2.0,)
@@ -166,17 +166,17 @@ class VitonHDTestDataset(data.Dataset):
         ).resize((self.width,self.height))
         image = self.transform(im_pil_big)
 
-        mask = Image.open(os.path.join(self.dataroot, self.phase, "agnostic-mask", im_name.replace('.jpg','_mask.png'))).resize((self.width,self.height))
+        mask = Image.open(os.path.join(self.dataroot, self.phase, "agnostic-mask", im_name)).resize((self.width,self.height))
         mask = self.toTensor(mask)
         mask = mask[:1]
         mask = 1-mask
         im_mask = image * mask
- 
+
         pose_img = Image.open(
             os.path.join(self.dataroot, self.phase, "image-densepose", im_name)
         )
         pose_img = self.transform(pose_img)  # [-1,1]
- 
+
         result = {}
         result["c_name"] = c_name
         result["im_name"] = im_name
@@ -285,8 +285,8 @@ def main():
     unet.eval()
     UNet_Encoder.eval()
 
-    
-    
+
+
     if args.enable_xformers_memory_efficient_attention:
         if is_xformers_available():
             import xformers
@@ -342,10 +342,10 @@ def main():
                     img_emb_list = []
                     for i in range(sample['cloth'].shape[0]):
                         img_emb_list.append(sample['cloth'][i])
-                    
+
                     prompt = sample["caption"]
 
-                    num_prompts = sample['cloth'].shape[0]                                        
+                    num_prompts = sample['cloth'].shape[0]
                     negative_prompt = "monochrome, lowres, bad anatomy, worst quality, low quality"
 
                     if not isinstance(prompt, List):
@@ -367,8 +367,8 @@ def main():
                             do_classifier_free_guidance=True,
                             negative_prompt=negative_prompt,
                         )
-                    
-                    
+
+
                         prompt = sample["caption_cloth"]
                         negative_prompt = "monochrome, lowres, bad anatomy, worst quality, low quality"
 
@@ -390,7 +390,7 @@ def main():
                                 do_classifier_free_guidance=False,
                                 negative_prompt=negative_prompt,
                             )
-                        
+
 
 
                         generator = torch.Generator(pipe.device).manual_seed(args.seed) if args.seed is not None else None
@@ -406,7 +406,7 @@ def main():
                             text_embeds_cloth=prompt_embeds_c,
                             cloth = sample["cloth_pure"].to(accelerator.device),
                             mask_image=sample['inpaint_mask'],
-                            image=(sample['image']+1.0)/2.0, 
+                            image=(sample['image']+1.0)/2.0,
                             height=args.height,
                             width=args.width,
                             guidance_scale=args.guidance_scale,
@@ -417,7 +417,7 @@ def main():
                     for i in range(len(images)):
                         x_sample = pil_to_tensor(images[i])
                         torchvision.utils.save_image(x_sample,os.path.join(args.output_dir,sample['im_name'][i]))
-                
+
 
 
 
