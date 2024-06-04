@@ -1,1 +1,21 @@
 model_name : 'IDM-VITON_custom trained_model'
+dir : 'trained_models'   #whereyou want to savemodel checkpoints
+lr : 0.00002
+weight_decay : 0.000005
+ckpt_file_name : 'IDM-VITON_custom_train'
+"pretrained_model_name_or_path" : "yisol/IDM-VTON"
+"width": 768
+"height": 1024
+"num_inference_steps": 30
+"output_dir": "result"   #where you want to save the results
+"category": "upper_body" # Change this value if needed ("upper_body", "lower_body", "dresses")
+"unpaired": False   # Set to True if the --unpaired flag should be used
+"data_dir": "archive"     # Path to the data directory
+"seed": 42
+"train_batch_size": 2
+"train_epochs": 10
+"test_batch_size": 2
+"guidance_scale": 2
+"mixed_precision": "fp16"   # Change this value if needed ("no", "fp16", "bf16")
+"enable_xformers_memory_efficient_attention": False  # Set to True if the --enable_xformers_memory_efficient_attention flag should be used
+"accumulate_grad_batches" : 50
