@@ -162,6 +162,7 @@ ckpt
 ## Training Script
 [Here](train.ipynb) is the training script for training on [VITON-HD](https://www.kaggle.com/datasets/marquis03/high-resolution-viton-zalando-dataset?resource=download) dataset available on Kaggle
 
+* Change the present-working-dir in python notebook to absolute path of the repo folder.
 * The training parameters can be adjust through yaml file : [viton_train_config.yaml](viton_train_config.yaml)
 * I have referenced related research [paper](VTON.pdf) to understand the model and data-flow design
 
