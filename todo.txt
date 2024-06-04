@@ -1,6 +1,0 @@
-- Shift entire thing to kaggle 
-- Run for 1 epoch
-- Initialize the weights of TryonNet randomly with scaling
-- Compare results with inference using default and trained model.
-- Understand data and Sample from entire dataset (for faster training)
-- Connect to wandb and create a report
